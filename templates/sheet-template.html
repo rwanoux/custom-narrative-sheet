@@ -1,0 +1,179 @@
+<form class="actor-sheet {{cssClass}}" autocomplete="off">
+    <header>
+        <h1><input name="name" type="text" value="{{actor.name}}"
+                placeholder="Threat Name" />
+        </h1>
+    </header>
+    {{log this}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="main">principal</a>
+        <a class="item" data-tab="who">qui je suis</a>
+        <a class="item" data-tab="inventory">gestion de l'inventaire</a>
+
+    </nav>
+    <section class="sheet-body">
+
+        <!--**************** stat-tab******************--->
+        <div class="tab stats flexrow" data-group="primary" data-tab="main">
+
+
+
+            <h3 class="actor-archetype">
+                <input type="text" data-narrative="archetype"
+                    />
+            </h3>
+            <div class="quotes-section">
+                <div class="citation">
+                    <h4>citation</h4>
+                    <textarea cols="30" rows="5" data-narrative="citation"></textarea>
+                </div>
+                <div class="inspiredWords">
+                    <h4>inspired words</h4>
+                    <ol data-narrative="inspiredWords"
+                        data-narrative-list="true">
+
+                    </ol>
+                </div>
+                <div class="masterRelation">
+                    <h3>ma relation au maître</h3>
+                    <div id="masterRelation">
+
+                    </div>
+
+                </div>
+                <div class="rituals">
+                    <h4>rites et rituels</h4>
+                    <ol data-narrative="rituals"
+                        data-narrative-list="true">
+
+                    </ol>
+                </div>
+                <div class="souvenirs">
+                    <h4>souvenirs</h4>
+                    <ol data-narrative="souvenirs"
+                        data-narrative-list="true">
+
+                    </ol>
+                </div>
+
+            </div>
+            <div class="image-section">
+                <img src="{{actor.img}}" data-edit="img"
+                    title="{{actor.name}}" />
+                <div class="rollResults">
+                    <a id="d12normal" data-narrative-roll="1d12"><i class="fa
+                            fa-dice-d12"></i>1d12</a>
+                    <a id="d12advantage" data-narrative-roll="2d12kh"><i
+                            class="fa fa-dice-d12"></i>1d12 avantage</a>
+                    <a id="d12disadvantage" data-narrative-roll="1d12kl"><i
+                            class="fa fa-dice-d12"></i>1d12
+                        désavantage</a>
+                </div>
+
+            </div>
+            <div class="links-section">
+                <h4>liens</h4>
+                <ol data-narrative="links"
+                    data-narrative-links="true">
+
+                </ol>
+            </div>
+            <div class="inventory-roll">
+                <a id="jetInventaire" data-narrative-roll="2d6"><i
+                        class="fa fa-dice"></i>jet d'inventaire</a>
+                <ol class="display-inventaire">
+                    {{#each sortableInventory as |slot|}}
+                    {{#if slot.item}}
+                    <li class="slot
+                        {{#if slot.available}}available{{/if}}"
+                        data-slot-index="{{slot.slot}}"
+                        data-item-id="{{slot.itemId}}">
+
+                        {{slot.item.name}}
+
+                    </li>
+                    {{else}}
+                    <li class="slot
+                        {{#if slot.available}}available{{/if}}"
+                        data-slot-index="{{slot.slot}}">
+
+
+                        slot vide
+
+                    </li>
+                    {{/if}}
+                    {{/each}}
+                </ol>
+            </div>
+
+        </div>
+        <!--**************** stat-tab******************--->
+        <div class="tab stats" data-group="primary" data-tab="who">
+
+
+            <h1>qui je suis ...
+            </h1>
+            {{#if isGM}}
+            <h4>création du texte à trous</h4>
+            <p>écrivez "[blank]" pour créer un blanc à remplir</p>
+            <textarea id="textWithBlanksGM"
+                cols="30" rows="15">
+                {{{textWithBlankGM}}}
+            </textarea>
+            <a id="validTextWithBlanksGM">valider</a>
+            {{/if}}
+            <p data-narrative="textWithBlankPlayer"
+                data-narrative-textWithBlanck="true">
+                {{{textWithBlankPlayer}}}
+            </p>
+
+        </div>
+        <!--**************** stat-tab******************--->
+        <div class="tab stats" data-group="primary" data-tab="inventory">
+
+
+            <h1>inventaire
+            </h1>
+            <div class="flexrow">
+                <div>
+                    <h2>tous mes items</h2>
+                    <ul class="allItems">
+                        {{#each actor.items as |item|}}
+
+                        <li class="item" data-item-id="{{item._id}}">{{item.name}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                <div>
+                    <h2>mon inventaire accessible</h2>
+                    <ol class="sortableInventory">
+                        {{#each sortableInventory as |slot|}}
+                        {{#if slot.item}}
+                        <li class="slot item"
+                            data-slot-index="{{slot.slot}}"
+                            data-item-id="{{slot.itemId}}">
+
+                            {{slot.item.name}}
+
+                        </li>
+                        {{else}}
+                        <li class="slot "
+                            data-slot-index="{{slot.slot}}">
+
+                            slot vide
+
+                        </li>
+                        {{/if}}
+                        {{/each}}
+                    </ol>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>
+
+
+
+</form>

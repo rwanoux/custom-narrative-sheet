@@ -143,7 +143,7 @@ function buildTS() {
  * Build Less
  */
 function buildLess() {
-	return gulp.src('src/*.less').pipe(less()).pipe(gulp.dest('dist'));
+	return gulp.src('*.scss').pipe(less()).pipe(gulp.dest('./'));
 }
 
 /**
