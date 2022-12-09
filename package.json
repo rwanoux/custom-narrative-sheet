@@ -1,0 +1,25 @@
+{
+  "name": "custom-narrative-sheet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "custom-narrative-sheet.js",
+  "scripts": {
+    "watch": "gulp watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rwanoux/custom-narrative-sheet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rwanoux/custom-narrative-sheet/issues"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.55.0"
+  },
+  "homepage": "https://github.com/rwanoux/custom-narrative-sheet#readme"
+}

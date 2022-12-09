@@ -1,8 +1,6 @@
 <form class="actor-sheet {{cssClass}}" autocomplete="off">
     <header>
-        <h1><input name="name" type="text" value="{{actor.name}}"
-                placeholder="Threat Name" />
-        </h1>
+
     </header>
     {{log this}}
     <nav class="sheet-tabs tabs" data-group="primary">
@@ -15,20 +13,16 @@
 
         <!--**************** stat-tab******************--->
         <div class="tab stats flexrow" data-group="primary" data-tab="main">
-
-
-
-            <h3 class="actor-archetype">
-                <input type="text" data-narrative="archetype"
-                    />
-            </h3>
-            <div class="quotes-section">
+            <div class="actor-archetype">
+                {{actor.flags.custom-narrative-sheet.archetype}}
+            </div>
+            <div class="quotes-section flexcol">
                 <div class="citation">
-                    <h4>citation</h4>
+                    <h3>citation</h3>
                     <textarea cols="30" rows="5" data-narrative="citation"></textarea>
                 </div>
                 <div class="inspiredWords">
-                    <h4>inspired words</h4>
+                    <h3>mots clef</h3>
                     <ol data-narrative="inspiredWords"
                         data-narrative-list="true">
 
@@ -49,7 +43,7 @@
                     </ol>
                 </div>
                 <div class="souvenirs">
-                    <h4>souvenirs</h4>
+                    <h2>souvenirs</h2>
                     <ol data-narrative="souvenirs"
                         data-narrative-list="true">
 
@@ -60,27 +54,63 @@
             <div class="image-section">
                 <img src="{{actor.img}}" data-edit="img"
                     title="{{actor.name}}" />
-                <div class="rollResults">
-                    <a id="d12normal" data-narrative-roll="1d12"><i class="fa
-                            fa-dice-d12"></i>1d12</a>
-                    <a id="d12advantage" data-narrative-roll="2d12kh"><i
-                            class="fa fa-dice-d12"></i>1d12 avantage</a>
-                    <a id="d12disadvantage" data-narrative-roll="1d12kl"><i
-                            class="fa fa-dice-d12"></i>1d12
-                        désavantage</a>
+                <h1><input name="name" type="text" value="{{actor.name}}"
+                        placeholder="Threat Name" />
+                </h1>
+                <h3 class="actor-archetype">
+                    <label>archetype</label>
+                    <input type="text" data-narrative="archetype"
+                        />
+                </h3>
+                <div class="rollResults flexrow">
+                    <a data-tooltip="jet normal 1d12" id="d12normal"
+                        data-narrative-roll="1d12"><i class="fa
+                            fa-dice-d12"></i></a>
+                    <a data-tooltip="jet avec avantage 1d12" id="d12advantage"
+                        data-narrative-roll="2d12kh"><i
+                            class="fa fa-dice-d12"></i></a>
+                    <a data-tooltip="jet avec désavantage 1d12"
+                        id="d12disadvantage" data-narrative-roll="2d12kl"><i
+                            class="fa fa-dice-d12"></i></a>
                 </div>
 
             </div>
-            <div class="links-section">
-                <h4>liens</h4>
-                <ol data-narrative="links"
-                    data-narrative-links="true">
+            <div class="links-section flexcol">
+                <div>
+                    <h2>liens</h2>
+                    <ol data-narrative="links"
+                        data-narrative-links="true">
 
-                </ol>
+                    </ol>
+                </div>
+                <div>
+                    <h2>Liens avec la Force</h2>
+                    <div class="forceLink">
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable1"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable2"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable3"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable4"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable5"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable6"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable7"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable8"></textarea>
+                        <textarea cols="30" rows="5"
+                            data-narrative="forceLinkTable9"></textarea>
+                    </div>
+                </div>
             </div>
             <div class="inventory-roll">
-                <a id="jetInventaire" data-narrative-roll="2d6"><i
-                        class="fa fa-dice"></i>jet d'inventaire</a>
+                <a data-tooltip="jet d'inventaire" id="jetInventaire"
+                    data-narrative-roll="2d6"><i
+                        class="fa fa-dice"></i></a>
                 <ol class="display-inventaire">
                     {{#each sortableInventory as |slot|}}
                     {{#if slot.item}}
@@ -98,7 +128,7 @@
                         data-slot-index="{{slot.slot}}">
 
 
-                        slot vide
+                        emplacement vide
 
                     </li>
                     {{/if}}
@@ -114,12 +144,10 @@
             <h1>qui je suis ...
             </h1>
             {{#if isGM}}
-            <h4>création du texte à trous</h4>
+            <h2>création du texte à trous</h2>
             <p>écrivez "[blank]" pour créer un blanc à remplir</p>
             <textarea id="textWithBlanksGM"
-                cols="30" rows="15">
-                {{{textWithBlankGM}}}
-            </textarea>
+                cols="30" rows="15">{{{textWithBlankGM}}}</textarea>
             <a id="validTextWithBlanksGM">valider</a>
             {{/if}}
             <p data-narrative="textWithBlankPlayer"
@@ -140,7 +168,15 @@
                     <ul class="allItems">
                         {{#each actor.items as |item|}}
 
-                        <li class="item" data-item-id="{{item._id}}">{{item.name}}</li>
+                        <li class="item flexrow" data-item-id="{{item._id}}">
+                            <h5>{{item.name}}</h5>
+                            <a data-item-control="edit">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a data-item-control="delete">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </li>
                         {{/each}}
                     </ul>
                 </div>
@@ -149,18 +185,22 @@
                     <ol class="sortableInventory">
                         {{#each sortableInventory as |slot|}}
                         {{#if slot.item}}
-                        <li class="slot item"
+                        <li class="slot item flexrow"
                             data-slot-index="{{slot.slot}}"
                             data-item-id="{{slot.itemId}}">
-
                             {{slot.item.name}}
+
+                            <a data-item-control="emptySlot"
+                                data-tooltip="libérer l'emplacement">
+                                <i class="fa fa-ban"></i>
+                            </a>
 
                         </li>
                         {{else}}
                         <li class="slot "
                             data-slot-index="{{slot.slot}}">
 
-                            slot vide
+                            emplacement vide
 
                         </li>
                         {{/if}}

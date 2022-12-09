@@ -5,13 +5,14 @@ export default class NarrativeSheet extends ActorSheet {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            height: 600,
+            height: 670,
             width: 850,
             template: "templates/sheets/actor-sheet.html",
             closeOnSubmit: false,
             submitOnClose: true,
             submitOnChange: true,
             resizable: true,
+            classes: ["custom-narrative"],
             tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
 
             dragDrop: [{
@@ -42,10 +43,8 @@ export default class NarrativeSheet extends ActorSheet {
         let textWithBlankGM = await this.actor.getFlag("custom-narrative-sheet", "textWithBlankGM")
         if (!textWithBlankGM) { textWithBlankGM = await this.prepareTextWithBlankGM() }
         context.textWithBlankGM = textWithBlankGM;
-        let modelInput = '<input type="text"/>'
-        let textWithBlankPlayer = textWithBlankGM.replaceAll('[blank]', modelInput);
-        await this.actor.setFlag("custom-narrative-sheet", "textWithBlankPlayer", textWithBlankPlayer);
 
+        let textWithBlankPlayer = await this.prepareTextWithBlankPlayer()
         context.textWithBlankPlayer = textWithBlankPlayer;
 
         return context;
@@ -62,6 +61,22 @@ export default class NarrativeSheet extends ActorSheet {
         let textWithBlankGM = "";
         await this.actor.setFlag("custom-narrative-sheet", "textWithBlankGM", textWithBlankGM);
         return textWithBlankGM;
+    }
+    async prepareTextWithBlankPlayer() {
+        let textGM = await this.actor.getFlag("custom-narrative-sheet", "textWithBlankGM");
+        let arrayText = textGM.split('[blank]');
+        await this.actor.setFlag("custom-narrative-sheet", "splitedText", arrayText)
+        let textInputs = "";
+        for (let i = 0; i < arrayText.length; i++) {
+            textInputs += arrayText[i];
+            if (i < arrayText.length - 1) {
+                textInputs += `<input type="text" data-blank-index="${i}"/>`
+            }
+
+        }
+        console.log(textInputs)
+        await this.actor.setFlag("custom-narrative-sheet", "textWithBlankPlayer", textInputs)
+        return textInputs
     }
 
     async prepareMasterRelation() {
@@ -100,15 +115,31 @@ export default class NarrativeSheet extends ActorSheet {
         })
         await this.actor.setFlag("custom-narrative-sheet", "sortableInventory", sortableInventory)
     }
+
+
     async activateListeners(html) {
         super.activateListeners(html);
 
+        await this.prepareBlanks(html);
+        let blanks = html.find('[data-blank-index]');
+        for (let blank of blanks) {
+            blank.addEventListener('change', this.fillBlanks.bind(this))
+        }
 
-
+        let itemActions = html.find('[data-item-control]');
+        for (let action of itemActions) {
+            console.log(action)
+            action.addEventListener('click', this.onItemAction.bind(this))
+        }
         await this.displayMasterRelation(html);
+        if (game.user.isGM) {
+            html.find('#validTextWithBlanksGM')[0].addEventListener("click", this.changeTextWithBlank.bind(this))
 
-        html.find('#validTextWithBlanksGM')[0].addEventListener("click", this.changeTextWithBlank.bind(this))
-
+        }
+        let itemUses = html.find('.slot.available');
+        for (let slot of itemUses) {
+            slot.addEventListener('click', this.grabItem.bind(this))
+        }
         let masterChecks = html.find('[data-master-value]');
         for (let check of masterChecks) {
             check.addEventListener("change", this.changeMasterRelation.bind(this))
@@ -140,10 +171,89 @@ export default class NarrativeSheet extends ActorSheet {
             el.addEventListener('change', this._onChangeNarrative.bind(this))
         }
     }
+    async grabItem(ev) {
+        let itemId = ev.currentTarget.dataset.itemId;
+        let item = await this.actor.getEmbeddedDocument("Item", itemId);
+        if (!item) { return ui.notifications.warn('vous voulez utiliser un emplacement vide') }
+        let messContent = `
+            <h3>${this.actor.name}</h3>
+            <p>prends <strong>${item.name}</strong></p>
+        `
+        let chatData = {
+            user: game.user._id,
+            speaker: ChatMessage.getSpeaker(),
+            content: messContent
+        };
+        ChatMessage.create(chatData);
+    }
+    async prepareBlanks(html) {
+        let blanks = html.find('[data-blank-index]');
+        let blanksFilled = await this.actor.getFlag("custom-narrative-sheet", "blanks");
+        if (!blanksFilled) { blanksFilled = [] }
+        for (let i = 0; i < blanks.length; i++) {
+            blanks[i].value = blanksFilled[i];
 
+        }
+    }
+    onItemAction(ev) {
+        console.log("action")
+        let itemId = ev.currentTarget.closest('li.item').dataset.itemId;
+        let action = ev.currentTarget.dataset.itemControl;
+        switch (action) {
+            case "edit":
+                this.openItemSheet(itemId);
+                break;
+            case "delete":
+                this.deleteItem(itemId);
+                break;
+            case "emptySlot":
+                this.emptySlot(itemId);
+                break;
+        }
+    }
+    async deleteItem(id) {
+        let item = await this.actor.getEmbeddedDocument("Item", id);
+
+        let dial = new Dialog({
+            content: `êtes vous sûr de vouloir supprimer ${item.name}`,
+            buttons: {
+                one: {
+                    icon: '<i class="fas fa-trash"></i>',
+                    label: `oui supprimer`,
+                    callback: () =>
+                        item.delete()
+
+                },
+                two: {
+                    icon: '<i class="fas fa-ban"></i>',
+                    label: `Oops, ne rien faire`,
+
+                },
+            },
+        });
+        dial.render(true);
+    }
+    async emptySlot(id) {
+        let sortableInventory = await this.actor.getFlag("custom-narrative-sheet", "sortableInventory");
+        let targetSlot = sortableInventory.find(sl => sl.itemId == id);
+        targetSlot.itemId = null;
+        targetSlot.item = null;
+        await this.actor.setFlag("custom-narrative-sheet", "sortableInventory", sortableInventory)
+    }
+    async openItemSheet(id) {
+        let item = await this.actor.getEmbeddedDocument("Item", id);
+        item.sheet.render(true)
+    }
+    async fillBlanks(ev) {
+        let blankIndex = ev.currentTarget.dataset.blankIndex;
+        let blanks = await this.actor.getFlag("custom-narrative-sheet", "blanks") || [];
+        blanks[blankIndex] = ev.currentTarget.value;
+        await this.actor.setFlag("custom-narrative-sheet", "blanks", blanks)
+    }
     async changeTextWithBlank(ev) {
-        let textWithBlankGM = this.element.find("#textWithBlanksGM")[0].value;
+        let textWithBlankGM = this.element.find("#textWithBlanksGM")[0].value.trim();
         await this.actor.setFlag("custom-narrative-sheet", "textWithBlankGM", textWithBlankGM);
+
     }
 
     async displayMasterRelation(html) {
@@ -171,6 +281,7 @@ export default class NarrativeSheet extends ActorSheet {
             if (index < 12) {
                 sortableInventory[index] = {
                     item: it,
+                    itemId: it._id,
                     slot: index + 1
                 };
                 index++;
@@ -208,6 +319,7 @@ export default class NarrativeSheet extends ActorSheet {
             case "jetInventaire":
                 flavor = "jet d'inventaire";
                 await this.onInventoryRoll(roll);
+                break
 
             default:
                 flavor = "jet normal"
@@ -253,6 +365,7 @@ export default class NarrativeSheet extends ActorSheet {
 
         let itemInput = document.createElement('textarea');
 
+
         // creating a select for each actor owned by users
         let selectLink = document.createElement('select');
         let optNone = document.createElement('option');
@@ -295,10 +408,7 @@ export default class NarrativeSheet extends ActorSheet {
     }
     async createLinksItem(link, parentElement) {
 
-
-
         let actorLinked = await game.actors.get(link.actorId);
-        //todo effacer le lien si plus d'actor existant;
         if (actorLinked) {
             let actorName = actorLinked.name;
             let linkDesc = link.description;
@@ -314,35 +424,46 @@ export default class NarrativeSheet extends ActorSheet {
             let i = document.createElement('i');
             i.classList.add("fa", "fa-minus");
             i.title = "supprimer l'élément";
-            title.append(i)
+
+            let check = document.createElement('input');
+            check.type = "checkbox";
+            if (link.assigned) { check.checked = true };
+            check.value = true;
+            check.addEventListener('change', this.assignLink.bind(this))
             // listener for button
-            i.addEventListener("click", this.removeLinkItem.bind(this));
+            i.addEventListener("click", this.onDeleteLink.bind(this));
+            title.append(check, i);
             li.append(title, par);
             parentElement.append(li)
-        } else {
-            ui.notifications.warn(`le lien ${link.description} est affecté à un personnage non existant`)
+        }
+        // si actor en lien n'existe pas/plus le lien est supprimé
+        else {
+            this.deleteLink(link.id)
         }
 
 
 
     }
-    async removeLinkItem(ev) {
-
+    async assignLink(ev) {
         let linkId = ev.currentTarget.closest('li').dataset.linkId;
+        let links = await this.actor.getFlag("custom-narrative-sheet", "links");
+        let targetLink = links.find(l => l.id == linkId);
+        let value = ev.currentTarget.checked;
+        targetLink.assigned = value;
+        await this.actors.setFlag("custom-narrative-sheet", "links", links)
+    }
+    async deleteLink(id) {
         let flagLinks = await this.actor.getFlag("custom-narrative-sheet", "links");
-
-        let targetLink = flagLinks.find(it => it.id == linkId)
-
-
+        let targetLink = flagLinks.find(it => it.id == id)
         let index = flagLinks.indexOf(targetLink);
-
         flagLinks.splice(index, 1);
         await this.actor.setFlag("custom-narrative-sheet", "links", flagLinks)
-
         this.render(true);
+    }
 
-
-
+    async onDeleteLink(ev) {
+        let linkId = ev.currentTarget.closest('li').dataset.linkId;
+        await this.deleteLink(linkId)
     }
     async prepareList(element) {
 
