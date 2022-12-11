@@ -1,7 +1,5 @@
 <form class="actor-sheet {{cssClass}}" autocomplete="off">
-    <header>
-
-    </header>
+  
     {{log this}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="main">principal</a>
@@ -62,6 +60,7 @@
                         />
                 </h3>
                 <div class="rollResults flexrow">
+                    
                     <a data-tooltip="jet normal 1d12" id="d12normal"
                         data-narrative-roll="1d12"><i class="fa
                             fa-dice-d12"></i></a>
@@ -71,6 +70,11 @@
                     <a data-tooltip="jet avec désavantage 1d12"
                         id="d12disadvantage" data-narrative-roll="2d12kl"><i
                             class="fa fa-dice-d12"></i></a>
+                </div>
+                <div class="resultTips flexrow">
+                    <h5>1-5 Réussite</h5>
+                    <h5>6-11 Aubaine</h5>
+                    <h5>12 Critique</h5>
                 </div>
 
             </div>

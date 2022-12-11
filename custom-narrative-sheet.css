@@ -27,6 +27,14 @@ div.app.window-app.custom-narrative .window-content option:hover {
   outline: none;
   background-color: rgba(119, 119, 119, 0.199);
 }
+div.app.window-app.custom-narrative .window-content .fa-add {
+  position: relative;
+  top: -35px;
+}
+div.app.window-app.custom-narrative .window-content input[type=text],
+div.app.window-app.custom-narrative .window-content input[type=number] {
+  border: 1px solid gray;
+}
 div.app.window-app.custom-narrative .window-content div.checkerBox input[type=checkbox] {
   opacity: 0;
   width: 1.5rem;
@@ -41,28 +49,11 @@ div.app.window-app.custom-narrative .window-content div.checkerBox span.checker 
   height: 1.5rem;
   border-radius: 50%;
   left: -1.8rem;
-  background-color: gray;
-  border: 4px solid rgb(255, 255, 255);
+  box-shadow: 0px 0px 3px white inset;
   transition: 1s;
 }
 div.app.window-app.custom-narrative .window-content div.checkerBox.checked span.checker {
-  background-color: black;
-  border: 4px solid white;
-}
-div.app.window-app.custom-narrative .window-content header {
-  text-align: center;
-}
-div.app.window-app.custom-narrative .window-content header h1 input[type=text] {
-  padding: 8px;
-  min-height: 40px;
-}
-div.app.window-app.custom-narrative .window-content header h3 {
-  overflow: hidden;
-  max-height: 1px;
-  transition: 0.3s;
-}
-div.app.window-app.custom-narrative .window-content header:hover h3 {
-  max-height: 60px;
+  box-shadow: 0px 0px 15px white inset, 0px 0px 12px 3px white inset;
 }
 div.app.window-app.custom-narrative .window-content nav a[data-tab] {
   border: 1px solid gray;
@@ -95,9 +86,10 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab h2,
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab h3,
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab h4 {
   border: none;
-  border-bottom: 2px solid white;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   text-align: center;
   margin-top: 15px;
+  text-transform: uppercase;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div {
   padding: 5px 20px;
@@ -114,7 +106,12 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab > di
   background-color: rgba(145, 150, 196, 0.342);
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink textarea.active {
-  box-shadow: 0px 0px 100px rgba(0, 128, 0, 0.596) inset;
+  border-bottom: 3px solid green;
+  border-top: 3px solid green;
+  box-shadow: 0px 30px 60px rgba(0, 128, 0, 0.596) inset;
+}
+div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inspiredWords .fa-add {
+  top: 0;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inspiredWords ol li {
   display: inline-flex;
@@ -165,6 +162,10 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.image-section .rollResults #d12disadvantage {
   color: rgb(255, 137, 137);
+}
+div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.image-section .resultTips {
+  text-align: center;
+  margin-top: 20px;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab ul.allItems li {
   cursor: pointer;

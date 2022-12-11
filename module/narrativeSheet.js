@@ -124,14 +124,15 @@ export default class NarrativeSheet extends ActorSheet {
 
     async activateListeners(html) {
         super.activateListeners(html);
-        let masterRelation=await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
-        let selector=".master"+masterRelation;
+       
+        let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
+        let selector = ".master" + masterRelation;
         console.log(selector);
-        let textareas=html.find(selector);
-        for(let t of textareas){
+        let textareas = html.find(selector);
+        for (let t of textareas) {
             t.classList.add("active")
         }
-        
+
         await this.prepareBlanks(html);
         let blanks = html.find('[data-blank-index]');
         for (let blank of blanks) {
@@ -308,7 +309,7 @@ export default class NarrativeSheet extends ActorSheet {
         if (masterValue == 1 && old == 1) { masterValue = 0 }
         await this.actor.setFlag("custom-narrative-sheet", "masterRelation", masterValue);
         this.render(true);
-        
+
     }
     async prepareInventory() {
         let sortableInventory = [];
