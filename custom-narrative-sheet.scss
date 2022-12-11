@@ -130,10 +130,16 @@ div.app.window-app.custom-narrative {
                             background-color: rgb(85, 90, 139);
                         }
 
+
+                        textarea {
+                            background-color: rgba(145, 150, 196, 0.5);
+                        }
+
+
                         &>:nth-child(7n),
                         &>:nth-child(8n),
                         &>:nth-child(9n) {
-                            background-color: rgba(145, 150, 196, 0.342);
+                            background-color: rgba(82, 82, 82, 0.5);
                         }
 
                         textarea.active {

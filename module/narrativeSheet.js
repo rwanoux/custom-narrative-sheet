@@ -107,7 +107,7 @@ export default class NarrativeSheet extends ActorSheet {
 
         console.log(sortableInventory, targetSlot);
         const item = await Item.implementation.fromDropData(data);
-        sortableInventory[targetSlot - 1].itemId = item._id;
+        sortableInventory[targetSlot - 1].itemId = item._id || item.id;
         sortableInventory[targetSlot - 1].item = deepClone(item);
 
         sortableInventory.forEach(slot => {
@@ -124,7 +124,7 @@ export default class NarrativeSheet extends ActorSheet {
 
     async activateListeners(html) {
         super.activateListeners(html);
-       
+
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
         let selector = ".master" + masterRelation;
         console.log(selector);
@@ -381,7 +381,6 @@ export default class NarrativeSheet extends ActorSheet {
 
     }
     async prepareLinks(element) {
-        console.log(element);
         //adding a create button
         let icone = document.createElement("i")
         icone.classList.add("fa", "narrative-list-add", "fa-add");
@@ -420,14 +419,14 @@ export default class NarrativeSheet extends ActorSheet {
         //creating a validate button
         let validBut = document.createElement('a');
         validBut.innerHTML = "valider"
-        validBut.addEventListener("click", this.addNewLink.bind(this))
+        validBut.addEventListener("click", this.validNewLink.bind(this))
         itemEl.append(selectLink, itemInput, validBut);
 
         parentElement.append(itemEl);
 
     }
 
-    async addNewLink(ev) {
+    async validNewLink(ev) {
         let parent = ev.currentTarget.closest("li.narrative-links-item");
         let selectActor = parent.getElementsByTagName('SELECT')[0];
         let actorId = selectActor.options[selectActor.selectedIndex].value;
@@ -486,9 +485,10 @@ export default class NarrativeSheet extends ActorSheet {
         let linkId = ev.currentTarget.closest('li').dataset.linkId;
         let links = await this.actor.getFlag("custom-narrative-sheet", "links");
         let targetLink = links.find(l => l.id == linkId);
+        console.log(targetLink)
         let value = ev.currentTarget.checked;
         targetLink.assigned = value;
-        await this.actors.setFlag("custom-narrative-sheet", "links", links)
+        await this.actor.setFlag("custom-narrative-sheet", "links", links)
     }
     async deleteLink(id) {
         let flagLinks = await this.actor.getFlag("custom-narrative-sheet", "links");
