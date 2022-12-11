@@ -113,6 +113,9 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab > di
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(7n), div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(8n), div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(9n) {
   background-color: rgba(145, 150, 196, 0.342);
 }
+div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink textarea.active {
+  box-shadow: 0px 0px 100px rgba(0, 128, 0, 0.596) inset;
+}
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inspiredWords ol li {
   display: inline-flex;
   padding: 1px;
