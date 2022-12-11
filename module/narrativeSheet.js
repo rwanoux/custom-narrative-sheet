@@ -105,8 +105,8 @@ export default class NarrativeSheet extends ActorSheet {
         let available = !event.currentTarget.classList.contains("item");
         if (!available) { return ui.notifications.warn("emplacement d'inventaire déjà occupé") }
 
-        console.log(sortableInventory, targetSlot);
-        const item = await Item.implementation.fromDropData(data);
+        console.log(sortableInventory, targetSlot, data);
+        const item = await fromUuid(data.uuid);
         sortableInventory[targetSlot - 1].itemId = item._id || item.id;
         sortableInventory[targetSlot - 1].item = deepClone(item);
 
@@ -116,7 +116,7 @@ export default class NarrativeSheet extends ActorSheet {
                 slot.item = null
             }
         });
-        let realItem = this.actor.getEmbeddedDocument("Item", item._id);
+        let realItem = await this.actor.getEmbeddedDocument("Item", item.id);
         await realItem.setFlag("custom-narrative-sheet", "inventorySlot", targetSlot)
         await this.actor.setFlag("custom-narrative-sheet", "sortableInventory", sortableInventory)
     }
@@ -127,7 +127,6 @@ export default class NarrativeSheet extends ActorSheet {
 
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
         let selector = ".master" + masterRelation;
-        console.log(selector);
         let textareas = html.find(selector);
         for (let t of textareas) {
             t.classList.add("active")
@@ -141,7 +140,6 @@ export default class NarrativeSheet extends ActorSheet {
 
         let itemActions = html.find('[data-item-control]');
         for (let action of itemActions) {
-            console.log(action)
             action.addEventListener('click', this.onItemAction.bind(this))
         }
         await this.displayMasterRelation(html);
@@ -262,6 +260,7 @@ export default class NarrativeSheet extends ActorSheet {
     async emptySlot(id) {
         let sortableInventory = await this.actor.getFlag("custom-narrative-sheet", "sortableInventory");
         let targetSlot = sortableInventory.find(sl => sl.itemId == id);
+
         targetSlot.itemId = null;
         targetSlot.item = null;
         await this.actor.setFlag("custom-narrative-sheet", "sortableInventory", sortableInventory)
