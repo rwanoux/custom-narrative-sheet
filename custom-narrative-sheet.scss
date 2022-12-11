@@ -24,6 +24,39 @@ div.app.window-app.custom-narrative {
             }
         }
 
+        div.checkerBox {
+            input[type="checkbox"] {
+                opacity: 0;
+                width: 1.5rem;
+                height: 1.5rem;
+                cursor: pointer;
+
+            }
+
+            span.checker {
+                position: relative;
+                display: inline-block;
+                pointer-events: none;
+                width: 1.5rem;
+                height: 1.5rem;
+                border-radius: 50%;
+                left: -1.8rem;
+                background-color: gray;
+                border: 4px solid rgb(255, 255, 255);
+                transition: 1s;
+            }
+
+            &.checked {
+                span.checker {
+
+                    background-color: black;
+                    border: 4px solid white;
+                }
+            }
+        }
+
+
+
         header {
             text-align: center;
 

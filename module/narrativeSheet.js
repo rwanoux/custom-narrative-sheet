@@ -115,7 +115,9 @@ export default class NarrativeSheet extends ActorSheet {
                 slot.itemId = null;
                 slot.item = null
             }
-        })
+        });
+        let realItem = this.actor.getEmbeddedDocument("Item", item._id);
+        await realItem.setFlag("custom-narrative-sheet", "inventorySlot", targetSlot)
         await this.actor.setFlag("custom-narrative-sheet", "sortableInventory", sortableInventory)
     }
 
@@ -175,7 +177,6 @@ export default class NarrativeSheet extends ActorSheet {
         }
 
         let allowModif = await game.settings.get("custom-narrative-sheet", "allowPlayersModif");
-        console.log(allowModif)
         if (!allowModif && !game.user.isGM) {
             let icones = html.find('.fa-add');
             for (let i of icones) {
@@ -278,34 +279,40 @@ export default class NarrativeSheet extends ActorSheet {
         let container = html.find('#masterRelation')[0];
         console.log(masterRelation);
         for (let i = 1; i < 4; i++) {
+            let blk = document.createElement('div');
+            blk.classList.add("checkerBox")
             let check = document.createElement('input');
             check.type = "checkbox";
             check.classList.add("masterRelation");
-            if (i <= masterRelation) { check.checked = true };
+            if (i <= masterRelation) { check.setAttribute('checked', true); blk.classList.add("checked") };
             check.dataset.masterValue = i;
-            container.append(check)
+
+            let span = document.createElement('span');
+            span.classList.add('checker')
+            blk.append(check, span);
+            container.append(blk)
         }
 
     }
     async changeMasterRelation(ev) {
+        let old = await this.actor.getFlag("custom-narrative-sheet", "masterRelation")
         let masterValue = ev.currentTarget.dataset.masterValue;
-        alert(masterValue, ev.currentTarget.checked)
         ev.currentTarget.checked ? ev.currentTarget.setAttribute("checked", true) : ev.currentTarget.setAttribute("checked", false)
-        if (masterValue == 1 && ev.currentTarget.checked == true) { masterValue = 0 }
-        alert(masterValue)
+        if (masterValue == 1 && old == 1) { masterValue = 0 }
         await this.actor.setFlag("custom-narrative-sheet", "masterRelation", masterValue);
         this.render(true)
     }
     async prepareInventory() {
         let sortableInventory = [];
         let index = 0;
-        this.actor.items.forEach(it => {
+        this.actor.items.forEach(async (it) => {
             if (index < 12) {
                 sortableInventory[index] = {
                     item: it,
                     itemId: it._id,
                     slot: index + 1
                 };
+                await it.setFlag("custom-narrative-sheet", "inventorySlot", index + 1)
                 index++;
             } else {
                 ui.notifications.warn('votre inventaire dépasse 12 objets')

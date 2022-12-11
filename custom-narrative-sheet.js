@@ -50,7 +50,7 @@ Hooks.once('ready', async function () {
 	let checkActorsOk = await game.settings.get("custom-narrative-sheet", "actorsChecked");
 	let model = new NarrativeDataModel();
 
-	console.log('//custom narrative sheet// actors checked:'+checkActorsOk, '//modelData\\',model);
+	console.log('//custom narrative sheet// actors checked:' + checkActorsOk, '//modelData\\', model);
 
 	if (!checkActorsOk) {
 		for (let actor of game.actors) {
@@ -62,9 +62,16 @@ Hooks.once('ready', async function () {
 		}
 		await game.settings.set("custom-narrative-sheet", "actorsChecked", true);
 	}
-
-
-
 });
 
 // Add any additional hooks if necessary
+Hooks.on('updateItem', async function (item, updates, options, userId) {
+	console.log(item)
+	let sortableSlot = await item.getFlag("custom-narrative-sheet", "inventorySlot");
+	if (!sortableSlot) { return };
+	let sortableInventory= await item.parent.getFlag("custom-narrative-sheet", "sortableInventory");
+	sortableInventory[sortableSlot-1].item= item;
+	await item.parent.setFlag("custom-narrative-sheet","sortableInventory", sortableInventory);
+	console.log(item.img)
+	item.parent.sheet.render(true)
+})
