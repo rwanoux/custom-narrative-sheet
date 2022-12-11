@@ -1,4 +1,6 @@
 import NarrativeDataModel from './dataModel.js';
+import defaultTooltips from '../defaultTooltips.js';
+
 
 export default class NarrativeSheet extends ActorSheet {
 
@@ -31,6 +33,7 @@ export default class NarrativeSheet extends ActorSheet {
         const context = await super.getData(options);
         context.isGM = game.user.isGM;
 
+        context.defaultTooltips = defaultTooltips;
         let sortableInventory = await this.actor.getFlag("custom-narrative-sheet", "sortableInventory")
         if (!sortableInventory) { sortableInventory = await this.prepareInventory() }
         context.sortableInventory = sortableInventory;
@@ -136,7 +139,7 @@ export default class NarrativeSheet extends ActorSheet {
             html.find('#validTextWithBlanksGM')[0].addEventListener("click", this.changeTextWithBlank.bind(this))
 
         }
-        let itemUses = html.find('.slot.available');
+        let itemUses = html.find(".slot.available [data-item-control='grab']");
         for (let slot of itemUses) {
             slot.addEventListener('click', this.grabItem.bind(this))
         }
@@ -170,9 +173,23 @@ export default class NarrativeSheet extends ActorSheet {
             // set flags on changes
             el.addEventListener('change', this._onChangeNarrative.bind(this))
         }
+
+        let allowModif = await game.settings.get("custom-narrative-sheet", "allowPlayersModif");
+        console.log(allowModif)
+        if (!allowModif && !game.user.isGM) {
+            let icones = html.find('.fa-add');
+            for (let i of icones) {
+                i.remove()
+            }
+            icones = html.find('.fa-minus');
+            for (let i of icones) {
+                i.remove()
+            }
+
+        }
     }
     async grabItem(ev) {
-        let itemId = ev.currentTarget.dataset.itemId;
+        let itemId = ev.currentTarget.closest('.item').dataset.itemId;
         let item = await this.actor.getEmbeddedDocument("Item", itemId);
         if (!item) { return ui.notifications.warn('vous voulez utiliser un emplacement vide') }
         let messContent = `
@@ -260,9 +277,10 @@ export default class NarrativeSheet extends ActorSheet {
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
         let container = html.find('#masterRelation')[0];
         console.log(masterRelation);
-        for (let i = 0; i < 4; i++) {
+        for (let i = 1; i < 4; i++) {
             let check = document.createElement('input');
             check.type = "checkbox";
+            check.classList.add("masterRelation");
             if (i <= masterRelation) { check.checked = true };
             check.dataset.masterValue = i;
             container.append(check)
@@ -271,6 +289,10 @@ export default class NarrativeSheet extends ActorSheet {
     }
     async changeMasterRelation(ev) {
         let masterValue = ev.currentTarget.dataset.masterValue;
+        alert(masterValue, ev.currentTarget.checked)
+        ev.currentTarget.checked ? ev.currentTarget.setAttribute("checked", true) : ev.currentTarget.setAttribute("checked", false)
+        if (masterValue == 1 && ev.currentTarget.checked == true) { masterValue = 0 }
+        alert(masterValue)
         await this.actor.setFlag("custom-narrative-sheet", "masterRelation", masterValue);
         this.render(true)
     }

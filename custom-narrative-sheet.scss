@@ -8,16 +8,25 @@ div.app.window-app.custom-narrative {
         select,
         textarea,
         option {
-            background: rgb(61, 61, 61);
             color: white;
-        }
-
-        textarea {
             resize: none;
+            background-color: transparent;
+            box-shadow: none;
+
+            border: none;
+
+            &:focus,
+            &:hover {
+                border: 1px solid gray;
+                box-shadow: 0 0 6px gray;
+                outline: none;
+                background-color: rgba(119, 119, 119, 0.199);
+            }
         }
 
         header {
             text-align: center;
+
 
 
             h1 {
@@ -77,7 +86,7 @@ div.app.window-app.custom-narrative {
 
                 .narrative-list-add {
                     position: relative;
-                    top: -40px;
+                    //top: -40px;
                 }
 
                 h1,
@@ -96,6 +105,18 @@ div.app.window-app.custom-narrative {
                     .forceLink {
                         display: grid;
                         grid-template-columns: repeat(3, 1fr);
+
+                        &>:nth-child(-n+3) {
+                            text-align: center;
+                            background-color: rgb(85, 90, 139);
+                        }
+
+                        &>:nth-child(7n),
+                        &>:nth-child(8n),
+                        &>:nth-child(9n) {
+                            background-color: rgba(145, 150, 196, 0.342);
+                        }
+
                     }
                 }
 
@@ -105,9 +126,12 @@ div.app.window-app.custom-narrative {
 
                         li {
                             display: inline-flex;
-                            border: 1px solid gray;
-                            padding: 5px;
-                            margin: 2px 5px;
+                            padding: 1px;
+                            margin: 0px 0px;
+
+                            &::after {
+                                content: "/"
+                            }
                         }
                     }
 
@@ -220,33 +244,100 @@ div.app.window-app.custom-narrative {
 
                 div.inventory-roll {
                     position: absolute;
-                    right: -20%;
-                    bottom: 0;
+                    top: 0%;
                     width: 20%;
-                    background-color: black;
-                    border-radius: 0px 70px 0px 0px;
+                    height: 100%;
+                    right: -22%;
                     padding: 0;
 
-                    li.slot {
-                        list-style: none;
-                        text-align: center;
-                        padding: 5px;
-                        background-color: rgba(128, 26, 0, 0.178);
-                        opacity: 0.6;
-                        width: 100%;
+
+                    #jetInventaire {
                         position: relative;
-                        left: -10%;
-                        border: 2px solid gray;
-                        cursor: not-allowed;
+                        top: 5%;
+                        left: -20%;
+                        text-shadow: 0px 0px 5px black;
+                        background-color: gray;
+                    }
 
-                        &.available {
-                            cursor: pointer;
-                            opacity: 1;
-                            display: block;
-                            background-color: rgba(0, 128, 0, 0.295);
+                    ol {
+                        height: 100%;
+                        padding: 0;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
 
+                        li.slot {
+                            max-height: 2rem;
+                            height: 2rem;
+                            max-width: 2rem;
+                            list-style: none;
+                            text-align: center;
+                            padding: 5px;
+                            box-shadow: 0px 0px 35px rgb(128, 26, 0)inset;
+                            background-color: black;
+                            opacity: 0.6;
+                            width: 100%;
+                            background-size: auto 100%;
+                            background-repeat: no-repeat;
+                            position: relative;
+                            left: -10%;
+                            cursor: not-allowed;
+                            transition: 0.2s;
+                            transition-delay: 0.6s;
+                            margin-bottom: 0.5rem;
+
+                            &>* {
+                                font-size: 2px;
+                                opacity: 0;
+                                transition: inherit;
+                                text-shadow: 0px 0px 10px black,
+                                    0px 0px 5px black, 0px 0px 2px black
+                            }
+
+                            a {
+                                pointer-events: none;
+
+                            }
+
+                            &.available {
+                                cursor: pointer;
+                                opacity: 1;
+                                display: block;
+
+                                box-shadow: none;
+
+                                a {
+                                    pointer-events: all;
+                                }
+
+
+                            }
+
+                            .description {
+                                display: none
+                            }
+
+                            &:hover {
+                                max-height: 5rem;
+                                height: 5rem;
+                                max-width: 5rem;
+                                width: 5rem;
+                                background-position: center;
+                                transition-delay: 0.6s;
+
+                                * {
+                                    font-size: unset;
+                                    opacity: 1;
+                                }
+
+                                .description {
+                                    display: unset;
+                                }
+
+                            }
                         }
                     }
+
                 }
             }
         }

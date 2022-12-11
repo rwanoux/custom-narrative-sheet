@@ -50,7 +50,7 @@ Hooks.once('ready', async function () {
 	let checkActorsOk = await game.settings.get("custom-narrative-sheet", "actorsChecked");
 	let model = new NarrativeDataModel();
 
-	console.log(checkActorsOk, model);
+	console.log('//custom narrative sheet// actors checked:'+checkActorsOk, '//modelData\\',model);
 
 	if (!checkActorsOk) {
 		for (let actor of game.actors) {
