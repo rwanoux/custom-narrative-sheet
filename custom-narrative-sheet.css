@@ -56,12 +56,20 @@ div.app.window-app.custom-narrative .window-content div.checkerBox.checked span.
   box-shadow: 0px 0px 15px white inset, 0px 0px 12px 3px white inset;
 }
 div.app.window-app.custom-narrative .window-content nav a[data-tab] {
-  border: 1px solid gray;
   width: 100%;
-}
-div.app.window-app.custom-narrative .window-content nav a[data-tab].active, div.app.window-app.custom-narrative .window-content nav a[data-tab]:hover {
-  background-color: rgb(46, 31, 31);
+  color: rgba(255, 255, 255, 0.466);
+  padding: 2px 0px;
   text-shadow: none;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  text-transform: uppercase;
+}
+div.app.window-app.custom-narrative .window-content nav a[data-tab].active {
+  color: white;
+  text-shadow: 0px 0px 25px rgb(255, 255, 255);
+  box-shadow: none;
+}
+div.app.window-app.custom-narrative .window-content nav a[data-tab]:hover {
+  box-shadow: 0px -15px 13px rgba(255, 255, 255, 0.137) inset;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab a,
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab i {
@@ -104,6 +112,8 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab > di
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink textarea {
   background-color: rgba(145, 150, 196, 0.5);
+  height: max-content;
+  padding: 2px;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(7n), div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(8n), div.app.window-app.custom-narrative .window-content section.sheet-body .tab > div .forceLink > :nth-child(9n) {
   background-color: rgba(82, 82, 82, 0.5);
@@ -137,15 +147,16 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.actor-archetype {
   position: absolute;
-  transform-origin: bottom left;
   text-transform: uppercase;
   font-size: 3em;
-  bottom: 0;
-  background-color: black;
-  border-radius: 0px 70px 0px 0px;
+  bottom: 0%;
+  left: 0px;
+  transform-origin: left bottom;
   transform: rotate(-90deg);
-  width: fit-content;
-  padding-right: 160px;
+  height: 1.5em;
+  background-color: black;
+  transform: rotate(-90deg);
+  text-align: center;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.image-section img {
   margin-left: 5%;
@@ -219,24 +230,25 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.
   justify-content: center;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inventory-roll ol li.slot {
-  max-height: 2rem;
-  height: 2rem;
-  max-width: 2rem;
+  max-height: 3rem;
+  height: 3rem;
+  max-width: 4.7rem;
   list-style: none;
   text-align: center;
-  padding: 5px;
-  box-shadow: 0px 0px 35px rgb(128, 26, 0) inset;
+  padding: 0px;
   background-color: black;
   opacity: 0.6;
   width: 100%;
-  background-size: auto 100%;
+  background-size: 100% auto;
   background-repeat: no-repeat;
+  background-position: center;
   position: relative;
   left: -10%;
   cursor: not-allowed;
   transition: 0.2s;
   transition-delay: 0.6s;
-  margin-bottom: 0.5rem;
+  margin-bottom: -0.4rem;
+  box-shadow: 0px -10px 15px rgb(0, 0, 0);
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inventory-roll ol li.slot > * {
   font-size: 2px;
@@ -251,7 +263,6 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.
   cursor: pointer;
   opacity: 1;
   display: block;
-  box-shadow: none;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inventory-roll ol li.slot.available a {
   pointer-events: all;
@@ -260,12 +271,14 @@ div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.
   display: none;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inventory-roll ol li.slot:hover {
-  max-height: 5rem;
-  height: 5rem;
-  max-width: 5rem;
-  width: 5rem;
+  z-index: 1;
+  max-height: 4rem;
+  height: 4rem;
+  max-width: 7rem;
+  width: 7rem;
   background-position: center;
   transition-delay: 0.6s;
+  box-shadow: 0px 0px 20px white;
 }
 div.app.window-app.custom-narrative .window-content section.sheet-body .tab div.inventory-roll ol li.slot:hover * {
   font-size: unset;

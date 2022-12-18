@@ -124,6 +124,10 @@ export default class NarrativeSheet extends ActorSheet {
 
     async activateListeners(html) {
         super.activateListeners(html);
+        let archEl = html.find("div.actor-archetype")[0];
+        console.log(this.position.height, archEl);
+        archEl.style.width=this.position.height+"px"
+
 
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
         let selector = ".master" + masterRelation;
