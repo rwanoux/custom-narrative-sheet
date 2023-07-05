@@ -1,188 +1,207 @@
 <form class="actor-sheet {{cssClass}}" autocomplete="off">
-  
     {{log this}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="main">principal</a>
         <a class="item" data-tab="who">qui je suis</a>
         <a class="item" data-tab="inventory">gestion de l'inventaire</a>
-
     </nav>
     <section class="sheet-body">
-
         <!--**************** stat-tab******************--->
         <div class="tab stats flexrow" data-group="primary" data-tab="main">
+            {{#if actor.flags.custom-narrative-sheet.archetype}}
             <div class="actor-archetype">
                 {{actor.flags.custom-narrative-sheet.archetype}}
             </div>
+            {{/if}}
             <div class="quotes-section flexcol">
                 <div class="citation">
                     <h3>citation</h3>
                     <textarea cols="30" rows="5" data-narrative="citation"></textarea>
-
                 </div>
                 <div class="inspiredWords">
                     <ol data-narrative="inspiredWords"
-                        data-narrative-list="true">
-
-                    </ol>
+                        data-narrative-list="true"></ol>
                 </div>
                 <div class="masterRelation">
-                    <h3 data-tooltip="{{defaultTooltips.masterRelation}}">ma relation au maître</h3>
-                    <div id="masterRelation">
-
-                    </div>
-
+                    <h3 data-tooltip="{{defaultTooltips.masterRelation}}">
+                        ma relation au maître
+                    </h3>
+                    <div id="masterRelation"></div>
                 </div>
                 <div class="rituals">
-                    <h3 data-tooltip="{{defaultTooltips.rites}}">rites et rituels</h3>
-                    <ol data-narrative="rituals"
-                        data-narrative-list="true">
-
-                    </ol>
+                    <h3 data-tooltip="{{defaultTooltips.rites}}">rites et
+                        rituels</h3>
+                    <ol data-narrative="rituals" data-narrative-list="true"></ol>
                 </div>
                 <div class="souvenirs">
-                    <h3 data-tooltip="{{defaultTooltips.souvenir}}">souvenirs</h3>
-                    <textarea cols="30" rows="8" data-narrative="souvenirs"></textarea>
-
+                    <ol>
+                        <h3 data-tooltip="{{defaultTooltips.souvenir}}">souvenirs</h3>
+                        <textarea cols="30" rows="8" data-narrative="souvenirs"></textarea>
                     </ol>
                 </div>
-
             </div>
             <div class="image-section">
-                <img src="{{actor.img}}" data-edit="img"
-                    title="{{actor.name}}" />
-                <h1><input name="name" type="text" value="{{actor.name}}"
+                <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+                <h1>
+                    <input
+                        name="name"
+                        type="text"
+                        value="{{actor.name}}"
                         placeholder="Threat Name" />
                 </h1>
                 <h3 class="actor-archetype">
                     <label>archetype</label>
-                    <input type="text" data-narrative="archetype"
-                        />
+                    <input type="text" data-narrative="archetype" />
                 </h3>
                 <div class="rollResults flexrow">
-                    
-                    <a data-tooltip="jet normal 1d12" id="d12normal"
-                        data-narrative-roll="1d12"><i class="fa
-                            fa-dice-d12"></i></a>
-                    <a data-tooltip="jet avec avantage 1d12" id="d12advantage"
-                        data-narrative-roll="2d12kh"><i
-                            class="fa fa-dice-d12"></i></a>
-                    <a data-tooltip="jet avec désavantage 1d12"
-                        id="d12disadvantage" data-narrative-roll="2d12kl"><i
-                            class="fa fa-dice-d12"></i></a>
+                    <a
+                        data-tooltip="jet normal 1d12"
+                        id="d12normal"
+                        data-narrative-roll="1d12"><i class="fa fa-dice-d12"></i></a>
+                    <a
+                        data-tooltip="jet avec avantage 1d12"
+                        id="d12advantage"
+                        data-narrative-roll="2d12kh"><i class="fa fa-dice-d12"></i></a>
+                    <a
+                        data-tooltip="jet avec désavantage 1d12"
+                        id="d12disadvantage"
+                        data-narrative-roll="2d12kl"><i class="fa fa-dice-d12"></i></a>
                 </div>
                 <div class="resultTips flexrow">
                     <h5>1-5 Réussite</h5>
                     <h5>6-11 Aubaine</h5>
                     <h5>12 Critique</h5>
                 </div>
-
             </div>
             <div class="links-section flexcol">
                 <div>
                     <h2 data-tooltip="{{defaultTooltips.liens}}">liens</h2>
-                    <ol data-narrative="links"
-                        data-narrative-links="true">
-
-                    </ol>
+                    <ol data-narrative="links" data-narrative-links="true"></ol>
                 </div>
                 <div>
-                    <h2 data-tooltip="{{defaultTooltips.liensForce}}">Liens avec la Force</h2>
+                    <h2 data-tooltip="{{defaultTooltips.liensForce}}">
+                        Liens avec la Force
+                    </h2>
                     <div class="forceLink">
                         <div>2-5</div>
                         <div>6-9</div>
                         <div>10+</div>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master1"
                             data-narrative="forceLinkTable1"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master1"
                             data-narrative="forceLinkTable2"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master1"
                             data-narrative="forceLinkTable3"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master2"
                             data-narrative="forceLinkTable4"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master2"
                             data-narrative="forceLinkTable5"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master2"
                             data-narrative="forceLinkTable6"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master3"
                             data-narrative="forceLinkTable7"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master3"
                             data-narrative="forceLinkTable8"></textarea>
-                        <textarea cols="30" rows="2"
+                        <textarea
+                            cols="30"
+                            rows="2"
                             class="master3"
                             data-narrative="forceLinkTable9"></textarea>
                     </div>
                 </div>
             </div>
             <div class="inventory-roll">
-                <a data-tooltip="jet d'inventaire" id="jetInventaire"
-                    data-narrative-roll="2d6"><i
-                        class="fa fa-dice"></i></a>
+                <a
+                    data-tooltip="jet d'inventaire"
+                    id="jetInventaire"
+                    data-narrative-roll="2d6"><i class="fa fa-dice"></i></a>
                 <ol class="display-inventaire sortableInventory flexrow">
                     {{#each sortableInventory as |slot|}}
                     {{#if slot.item}}
-                    <li class="slot item
+
+                    <li
+                        class="slot item
                         {{#if slot.available}}available{{/if}}"
                         data-slot-index="{{slot.slot}}"
                         data-item-id="{{slot.itemId}}"
                         style="background-image:url({{item.img}})">
-                        <span class="name">{{slot.item.name}}</span>
-                        <a data-item-control="edit"data-tooltip="ouvrir la fiche item">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a data-item-control="grab" data-tooltip="prendre l'item">
-                            <i class="fa-solid fa-hand-holding-medical"></i>
-                        </a>
 
+                        <div class="flexrow item-control">
+                            <a data-item-control="edit"
+                                data-tooltip="ouvrir la fiche item">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a data-item-control="grab"
+                                data-tooltip="prendre l'item">
+                                <i class="fa-solid fa-hand-holding-medical"></i>
+                            </a>
+                            <a data-item-control="make-power"
+                                data-tooltip="afficher comme pouvoir">
+                                <i class="fa-solid fa-sparkles"></i>
+                            </a>
+                        </div>
+                        {{#if slot.item.flags.world.isPower}}
+                        {{>'modules/custom-narrative-sheet/templates/item-power.html'
+                        item=slot.item}}
+                        {{else}}
+                        <h4 class="name">{{slot.item.name}}</h4>
+                        {{/if}}
                     </li>
                     {{else}}
-                    <li class="slot
+                    <li
+                        class="slot
                         {{#if slot.available}}available{{/if}}"
                         data-slot-index="{{slot.slot}}">
-
                         <span>emplacement vide</span>
-
-
                     </li>
                     {{/if}}
                     {{/each}}
                 </ol>
             </div>
-
         </div>
         <!--**************** stat-tab******************--->
         <div class="tab stats" data-group="primary" data-tab="who">
-
-
-            <h1>qui je suis ...
-            </h1>
+            <h1>qui je suis ...</h1>
             {{#if isGM}}
             <h2>création du texte à trous</h2>
             <p>écrivez "[blank]" pour créer un blanc à remplir</p>
-            <textarea id="textWithBlanksGM"
-                cols="30" rows="15">{{{textWithBlankGM}}}</textarea>
+            <textarea id="textWithBlanksGM" cols="30" rows="15">
+                {{{textWithBlankGM}}}</textarea>
             <a id="validTextWithBlanksGM">valider</a>
             {{/if}}
-            <p data-narrative="textWithBlankPlayer"
+            <p
+                data-narrative="textWithBlankPlayer"
                 data-narrative-textWithBlanck="true">
                 {{{textWithBlankPlayer}}}
             </p>
-
         </div>
         <!--**************** stat-tab******************--->
         <div class="tab stats" data-group="primary" data-tab="inventory">
-
-
-            <h1>inventaire
-            </h1>
+            <h1>inventaire</h1>
             <div class="flexrow">
                 <div>
                     <h2>tous mes items</h2>
@@ -204,37 +223,27 @@
                 <div>
                     <h2>mon inventaire accessible</h2>
                     <ol class="sortableInventory">
-                        {{#each sortableInventory as |slot|}}
-                        {{#if slot.item}}
-                        <li class="slot item flexrow"
+                        {{#each sortableInventory as |slot|}} {{#if slot.item}}
+                        <li
+                            class="slot item flexrow"
                             data-slot-index="{{slot.slot}}"
                             data-item-id="{{slot.itemId}}">
                             {{slot.item.name}}
 
-                            <a data-item-control="emptySlot"
+                            <a
+                                data-item-control="emptySlot"
                                 data-tooltip="libérer l'emplacement">
                                 <i class="fa fa-ban"></i>
                             </a>
-
                         </li>
                         {{else}}
-                        <li class="slot "
-                            data-slot-index="{{slot.slot}}">
-
+                        <li class="slot" data-slot-index="{{slot.slot}}">
                             emplacement vide
-
                         </li>
-                        {{/if}}
-                        {{/each}}
+                        {{/if}} {{/each}}
                     </ol>
                 </div>
-
             </div>
-
-
         </div>
     </section>
-
-
-
 </form>

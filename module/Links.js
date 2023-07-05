@@ -4,7 +4,7 @@ export default class Links {
         this.description = description;
     }
     async getLinkedActor() {
-        return await Gamepad.actors.get(this.linkedActorId)
+        return await game.actors.get(this.linkedActorId)
     }
     async sendDescriptionToLink() {
         ChatMessage.create({

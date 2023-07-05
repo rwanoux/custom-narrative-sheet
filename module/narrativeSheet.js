@@ -100,7 +100,7 @@ export default class NarrativeSheet extends ActorSheet {
     }
     async sortInventory(event, data) {
 
-        let sortableInventory = await this.actor.getFlag("custom-narrative-sheet", "sortableInventory");
+        let sortableInventory = this.actor.getFlag("custom-narrative-sheet", "sortableInventory");
         let targetSlot = event.currentTarget.dataset.slotIndex;
         let available = !event.currentTarget.classList.contains("item");
         if (!available) { return ui.notifications.warn("emplacement d'inventaire déjà occupé") }
@@ -125,8 +125,10 @@ export default class NarrativeSheet extends ActorSheet {
     async activateListeners(html) {
         super.activateListeners(html);
         let archEl = html.find("div.actor-archetype")[0];
-        console.log(this.position.height, archEl);
-        archEl.style.width=this.position.height+"px"
+        if (archEl) {
+            archEl.style.width = this.position.height + "px"
+
+        }
 
 
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
@@ -155,6 +157,7 @@ export default class NarrativeSheet extends ActorSheet {
         for (let slot of itemUses) {
             slot.addEventListener('click', this.grabItem.bind(this))
         }
+
         let masterChecks = html.find('[data-master-value]');
         for (let check of masterChecks) {
             check.addEventListener("change", this.changeMasterRelation.bind(this))
@@ -198,6 +201,11 @@ export default class NarrativeSheet extends ActorSheet {
             }
 
         }
+
+        let powerTexts = html.find(".power-text");
+        for (let text of powerTexts) {
+            text.addEventListener("change", this.changePowerText.bind(this))
+        }
     }
     async grabItem(ev) {
         let itemId = ev.currentTarget.closest('.item').dataset.itemId;
@@ -213,6 +221,26 @@ export default class NarrativeSheet extends ActorSheet {
             content: messContent
         };
         ChatMessage.create(chatData);
+    }
+    async changePowerText(ev) {
+        let item = this.actor.items.get(ev.currentTarget.closest("li.item").dataset.itemId)
+        let index = ev.currentTarget.dataset.index;
+        let flag = item.flags.world.powerStat;
+        flag.texts[index] = ev.currentTarget.value;
+        item.setFlag("world", "powerStat", flag)
+    }
+    async makeItemPower(itemId) {
+        console.log("_____________make power")
+        let item = await this.actor.getEmbeddedDocument("Item", itemId);
+        await item.setFlag("world", "isPower", !item.flags?.world?.isPower);
+
+        if (item.flags.world.isPower && !item.flags?.world?.powerStat) {
+            item.setFlag("world", "powerStat", {
+                texts: ["texte à remplir"],
+                score: 0,
+            });
+        }
+        console.log(item.flags.world)
     }
     async prepareBlanks(html) {
         let blanks = html.find('[data-blank-index]');
@@ -237,6 +265,8 @@ export default class NarrativeSheet extends ActorSheet {
             case "emptySlot":
                 this.emptySlot(itemId);
                 break;
+            case "make-power":
+                this.makeItemPower(itemId)
         }
     }
     async deleteItem(id) {
@@ -288,7 +318,6 @@ export default class NarrativeSheet extends ActorSheet {
     async displayMasterRelation(html) {
         let masterRelation = await this.actor.getFlag("custom-narrative-sheet", "masterRelation");
         let container = html.find('#masterRelation')[0];
-        console.log(masterRelation);
         for (let i = 1; i < 4; i++) {
             let blk = document.createElement('div');
             blk.classList.add("checkerBox")
@@ -390,8 +419,7 @@ export default class NarrativeSheet extends ActorSheet {
         icone.addEventListener("click", this.addLink.bind(this));
         icone.title = "ajouter un élément"
         element.append(icone);
-        let links = await this.actor.getFlag("custom-narrative-sheet", element.dataset.narrative);
-        if (!links) { links = [] }
+        let links = await this.actor.getFlag("custom-narrative-sheet", element.dataset.narrative) || [];
         for (let link of links) {
             this.createLinksItem(link, element)
         }
@@ -548,7 +576,6 @@ export default class NarrativeSheet extends ActorSheet {
     async createItemList(item, parentElement) {
         // creating a list item
         let li = document.createElement('li');
-        li.classList.add("flexrow");
 
         //putting value of the element in a span
         let span = document.createElement('span');
