@@ -4,7 +4,7 @@
         <h3>{{item.name}}</h3>
 
         <div class="power-text">
-            <h6>ajouter un texte
+            <h6 data-tooltip="ajouter un texte">
                 <i class="fas fa-add add-power-text"></i>
             </h6>
             {{#each item.flags.world.powerStat.texts as |text index|}}
@@ -13,12 +13,16 @@
             {{/each}}
         </div>
         <div class="power-score">
+            <ul class="flexrow">
 
+                {{radioBoxes "score" item.flags.world.powerStat.scores
+                checked=item.flags.world.powerStat.score }}
+            </ul>
         </div>
-
     </div>
     <div class="item-image">
         <img src="{{item.img}}">
 
     </div>
+
 </div>

@@ -205,6 +205,10 @@ export default class NarrativeSheet extends ActorSheet {
         let powerTexts = html.find(".power-text");
         for (let text of powerTexts) {
             text.addEventListener("change", this.changePowerText.bind(this))
+        };
+        let addTexts = html.find('i.add-power-text');
+        for (let i of addTexts) {
+            i.addEventListener("click", this.addPowerText.bind(this))
         }
     }
     async grabItem(ev) {
@@ -229,6 +233,13 @@ export default class NarrativeSheet extends ActorSheet {
         flag.texts[index] = ev.currentTarget.value;
         item.setFlag("world", "powerStat", flag)
     }
+    async addPowerText(ev) {
+        let item = this.actor.items.get(ev.currentTarget.closest("li.item").dataset.itemId);
+        let flag = item.flags.world.powerStat;
+        flag.texts.push("nouveau text");
+        item.setFlag("world", "powerStat", flag)
+
+    }
     async makeItemPower(itemId) {
         console.log("_____________make power")
         let item = await this.actor.getEmbeddedDocument("Item", itemId);
@@ -237,7 +248,8 @@ export default class NarrativeSheet extends ActorSheet {
         if (item.flags.world.isPower && !item.flags?.world?.powerStat) {
             item.setFlag("world", "powerStat", {
                 texts: ["texte à remplir"],
-                score: 0,
+                scores: [-3, -2, -1, 0, 1, 2, 3],
+                score: 0
             });
         }
         console.log(item.flags.world)
